@@ -1,21 +1,20 @@
 const request = require('supertest');
-const app = require('./index');  // Import the app
+const { app, server } = require('./index');  // Import app and server
 
 describe('Product Service API', () => {
-  let server;
 
   // Start the server before all tests
   beforeAll(async () => {
-    server = app.listen(3001, () => {
-      console.log('Product service running on http://localhost:3001');
-    });
+    // No need to manually call app.listen here, as it's already done in index.js
+    // Just make sure Jest waits for the server to start
+    console.log(`Product service running on http://localhost:${server.address().port}`);
   });
 
   // Close the server after all tests
   afterAll(async () => {
-    await server.close(() => {
-      console.log('Product service closed');
-    });
+    console.log('Closing product service');
+    await server.close();
+    console.log('Product service closed');
   });
 
   it('should return a list of products', async () => {
