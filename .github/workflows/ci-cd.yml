@@ -29,12 +29,13 @@ jobs:
         working-directory: ./customer-service
         run: npm install
 
-      - name: Run tests (optional)
-        run: |
-          cd product-service
-          # Add tests here, e.g., run a simple test command
-          cd ../customer-service
-          # Add tests here, e.g., run a simple test command
+      - name: Run tests for product-service
+        working-directory: ./product-service
+        run: npm test
+
+      - name: Run tests for customer-service
+        working-directory: ./customer-service
+        run: npm test
 
       - name: Dockerize product-service
         working-directory: ./product-service
