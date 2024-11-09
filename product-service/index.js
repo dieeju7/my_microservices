@@ -4,15 +4,23 @@ const port = 3001;
 
 let products = [{ id: 1, name: "Product A", price: 100 }];
 
+app.use(express.json()); // To parse JSON bodies
+
+// Get list of products
 app.get('/products', (req, res) => {
     res.json(products);
 });
 
-// Only start the server if this file is run directly (not when imported in tests)
-if (require.main === module) {
-  app.listen(port, () => {
+// Add a new product
+app.post('/products', (req, res) => {
+    const newProduct = req.body;
+    newProduct.id = products.length + 1;  // Simple ID assignment logic
+    products.push(newProduct);
+    res.status(201).json(newProduct);  // Respond with the newly added product
+});
+
+app.listen(port, () => {
     console.log(`Product service running on http://localhost:${port}`);
-  });
-}
+});
 
 module.exports = app;  // Export the app for testing purposes

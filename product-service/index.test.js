@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./index');  // Import the app, not the server
+const app = require('./index');  // Import the app
 
 describe('Product Service API', () => {
   let server;
