@@ -5,18 +5,16 @@ describe('Product Service API', () => {
   let server;
 
   // Start the server before all tests
-  beforeAll((done) => {
+  beforeAll(async () => {
     server = app.listen(3001, () => {
       console.log('Product service running on http://localhost:3001');
-      done();
     });
   });
 
   // Close the server after all tests
-  afterAll((done) => {
-    server.close(() => {
+  afterAll(async () => {
+    await server.close(() => {
       console.log('Product service closed');
-      done();
     });
   });
 

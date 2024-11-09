@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;  // Allow dynamic port assignment
 
 let products = [{ id: 1, name: "Product A", price: 100 }];
 
