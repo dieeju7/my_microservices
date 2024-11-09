@@ -21,12 +21,13 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
-        run: |
-          cd product-service
-          npm install
-          cd ../customer-service
-          npm install
+      - name: Install dependencies for product-service
+        working-directory: ./product-service
+        run: npm install
+
+      - name: Install dependencies for customer-service
+        working-directory: ./customer-service
+        run: npm install
 
       - name: Run tests (optional)
         run: |
@@ -35,15 +36,23 @@ jobs:
           cd ../customer-service
           # Add tests here, e.g., run a simple test command
 
-      - name: Dockerize the services (optional for production)
-        run: |
-          cd product-service
-          docker build -t product-service .
-          cd ../customer-service
-          docker build -t customer-service .
+      - name: Dockerize product-service
+        working-directory: ./product-service
+        run: docker build -t product-service:latest .
 
-      - name: Push Docker images (optional)
+      - name: Dockerize customer-service
+        working-directory: ./customer-service
+        run: docker build -t customer-service:latest .
+
+      - name: Log in to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+      - name: Push Docker images
         run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push product-service
-          docker push customer-service
+          docker tag product-service:latest $DOCKER_USERNAME/product-service:latest
+          docker push $DOCKER_USERNAME/product-service:latest
+          docker tag customer-service:latest $DOCKER_USERNAME/customer-service:latest
+          docker push $DOCKER_USERNAME/customer-service:latest
