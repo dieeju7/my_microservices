@@ -48,11 +48,13 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+        run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-      - name: Push Docker images
+      - name: Tag and Push Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
-          docker tag product-service:latest $DOCKER_USERNAME/product-service:latest
-          docker push $DOCKER_USERNAME/product-service:latest
-          docker tag customer-service:latest $DOCKER_USERNAME/customer-service:latest
-          docker push $DOCKER_USERNAME/customer-service:latest
+          docker tag product-service:latest "$DOCKER_USERNAME"/product-service:latest
+          docker push "$DOCKER_USERNAME"/product-service:latest
+          docker tag customer-service:latest "$DOCKER_USERNAME"/customer-service:latest
+          docker push "$DOCKER_USERNAME"/customer-service:latest
