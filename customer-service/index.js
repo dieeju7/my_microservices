@@ -1,18 +1,26 @@
 const express = require('express');
 const app = express();
-const port = 3002;  // Use a different port to avoid conflicts with the product-service
+const port = process.env.PORT || 3002; // Use a different port for customer service
 
-let customers = [{ id: 1, name: "Customer A" }];
+let customers = [{ id: 1, name: "Customer A", email: "customerA@example.com" }];
 
+app.use(express.json()); // To parse JSON bodies
+
+// Get list of customers
 app.get('/customers', (req, res) => {
-    res.json(customers);
+  res.json(customers);
 });
 
-// Only start the server if this file is run directly (not when imported in tests)
-if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Customer service running on http://localhost:${port}`);
-  });
-}
+// Add a new customer
+app.post('/customers', (req, res) => {
+  const newCustomer = req.body;
+  newCustomer.id = customers.length + 1;  // Simple ID assignment logic
+  customers.push(newCustomer);
+  res.status(201).json(newCustomer);  // Respond with the newly added customer
+});
 
-module.exports = app;  // Export the app for testing purposes
+const server = app.listen(port, () => {
+  console.log(`Customer service running on http://localhost:${port}`);
+});
+
+module.exports = { app, server };  // Export the app and server for testing purposes
