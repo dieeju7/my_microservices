@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./index'); // Make sure this is the correct path to your Express app
+const app = require('./index');  // Import the app, not the server
 
 describe('Product Service API', () => {
   let server;
@@ -32,6 +32,4 @@ describe('Product Service API', () => {
     expect(response.statusCode).toBe(201);
     expect(response.body).toMatchObject(newProduct);
   });
-
-  // Add more tests here as needed
 });

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./index'); // Make sure this is the correct path to your Express app
+const app = require('./index');  // Import the app, not the server
 
 describe('Customer Service API', () => {
   let server;
@@ -27,11 +27,9 @@ describe('Customer Service API', () => {
   });
 
   it('should add a new customer', async () => {
-    const newCustomer = { name: 'Test Customer', email: 'testcustomer@example.com' };
+    const newCustomer = { name: 'Test Customer' };
     const response = await request(app).post('/customers').send(newCustomer);
     expect(response.statusCode).toBe(201);
     expect(response.body).toMatchObject(newCustomer);
   });
-
-  // Add more tests here as needed
 });
