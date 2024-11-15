@@ -37,11 +37,23 @@ jobs:
         working-directory: ./customer-service
         run: npm test
 
+      - name: Check for changes in product-service
+        id: check_product_service
+        run: |
+          git diff --quiet HEAD^ HEAD ./product-service || echo "changes detected"
+
+      - name: Check for changes in customer-service
+        id: check_customer_service
+        run: |
+          git diff --quiet HEAD^ HEAD ./customer-service || echo "changes detected"
+
       - name: Dockerize product-service
+        if: steps.check_product_service.outcome == 'success'
         working-directory: ./product-service
         run: docker build -t product-service:latest .
 
       - name: Dockerize customer-service
+        if: steps.check_customer_service.outcome == 'success'
         working-directory: ./customer-service
         run: docker build -t customer-service:latest .
 
@@ -52,6 +64,7 @@ jobs:
         run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
       - name: Tag and Push Docker images
+        if: steps.check_product_service.outcome == 'success' || steps.check_customer_service.outcome == 'success'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
