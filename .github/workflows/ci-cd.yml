@@ -60,6 +60,11 @@ jobs:
           docker tag customer-service:latest "$DOCKER_USERNAME"/customer-service:latest
           docker push "$DOCKER_USERNAME"/customer-service:latest
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Deploy with Docker Compose
         run: |
           docker-compose pull
