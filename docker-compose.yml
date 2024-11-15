@@ -1,0 +1,10 @@
+version: '3'
+services:
+  product-service:
+    image: dieeju774/product-service:latest
+    ports:
+      - "3001:3001"
+  customer-service:
+    image: dieeju774/customer-service:latest
+    ports:
+      - "3002:3002"

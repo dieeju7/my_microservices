@@ -59,3 +59,8 @@ jobs:
           docker push "$DOCKER_USERNAME"/product-service:latest
           docker tag customer-service:latest "$DOCKER_USERNAME"/customer-service:latest
           docker push "$DOCKER_USERNAME"/customer-service:latest
+
+      - name: Deploy with Docker Compose
+        run: |
+          docker-compose pull
+          docker-compose up -d

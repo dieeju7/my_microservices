@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3002; // Use a different port for customer service
+const port = process.env.PORT || 3002; 
 
 let customers = [{ id: 1, name: "Customer A", email: "customerA@example.com" }];
 
